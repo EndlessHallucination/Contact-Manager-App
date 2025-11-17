@@ -57,3 +57,17 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## TODO 
+
+
+
+  Offline mode:
+ ○ All the app should function in offline mode
+ ○ If wechange records (CRUD) we want to be able to change all of this in the client in offline
+ mode and all will be synced to the backend when there is connectivity
+ 
+    add image upload for contact 
+    check ui for spinners, errors , fonts etc
+
+ 

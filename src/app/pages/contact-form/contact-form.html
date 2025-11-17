@@ -1,0 +1,149 @@
+<div class="contact-form-container">
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+    <h2>{{ editMode() ? 'Edit Contact' : 'Create Contact' }}</h2>
+
+    <!-- Name Section -->
+    <div class="form-section">
+      <h3>Personal Information</h3>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" formControlName="firstName" />
+          @if (contactForm.get('firstName')?.hasError('required')) {
+            <mat-error>First name is required</mat-error>
+          }
+          @if (contactForm.get('firstName')?.hasError('minlength')) {
+            <mat-error>First name must be at least 2 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" formControlName="lastName" />
+          @if (contactForm.get('lastName')?.hasError('required')) {
+            <mat-error>Last name is required</mat-error>
+          }
+          @if (contactForm.get('lastName')?.hasError('minlength')) {
+            <mat-error>Last name must be at least 2 characters</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" />
+          @if (contactForm.get('age')?.hasError('required')) {
+            <mat-error>Age is required</mat-error>
+          }
+          @if (contactForm.get('age')?.hasError('min')) {
+            <mat-error>Age must be at least 1</mat-error>
+          }
+          @if (contactForm.get('age')?.hasError('max')) {
+            <mat-error>Age must not exceed 150</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="form-section">
+      <h3>Contact Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        @if (contactForm.get('email')?.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (contactForm.get('email')?.hasError('email')) {
+          <mat-error>Please enter a valid email address</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Phone</mat-label>
+          <input matInput type="tel" formControlName="phone" />
+          @if (contactForm.get('phone')?.hasError('required')) {
+            <mat-error>Phone number is required</mat-error>
+          }
+          @if (contactForm.get('phone')?.hasError('pattern')) {
+            <mat-error>Phone number must contain only digits, spaces, dashes, plus, or parentheses</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Cell</mat-label>
+          <input matInput type="tel" formControlName="cell" />
+          @if (contactForm.get('cell')?.hasError('required')) {
+            <mat-error>Cell number is required</mat-error>
+          }
+          @if (contactForm.get('cell')?.hasError('pattern')) {
+            <mat-error>Cell number must contain only digits, spaces, dashes, plus, or parentheses</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Address Section -->
+    <div class="form-section">
+      <h3>Address</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Street</mat-label>
+        <input matInput type="text" formControlName="street" />
+        @if (contactForm.get('street')?.hasError('required')) {
+          <mat-error>Street address is required</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>City</mat-label>
+          <input matInput type="text" formControlName="city" />
+          @if (contactForm.get('city')?.hasError('required')) {
+            <mat-error>City is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>State</mat-label>
+          <input matInput type="text" formControlName="state" />
+          @if (contactForm.get('state')?.hasError('required')) {
+            <mat-error>State is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Postal Code</mat-label>
+          <input matInput type="text" formControlName="postalCode" />
+          @if (contactForm.get('postalCode')?.hasError('required')) {
+            <mat-error>Postal code is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Country</mat-label>
+          <input matInput type="text" formControlName="country" />
+          @if (contactForm.get('country')?.hasError('required')) {
+            <mat-error>Country is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit">
+        {{ editMode() ? 'Update Contact' : 'Create Contact' }}
+      </button>
+      <button mat-button type="button" (click)="onCancelClick()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

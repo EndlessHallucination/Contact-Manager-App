@@ -1,0 +1,53 @@
+<section class="contact-detail">
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+  @else if (contact(); as c) {
+
+    <div class="detail-header">
+      <img [src]="c.image" class="header-image" />
+
+      <div class="header-content">
+        <h1>{{ c.firstName }} {{ c.lastName }}</h1>
+
+        <div class="header-meta">
+          <p>{{ c.age }} years old</p>
+          <p>Joined {{ getFormattedDate(c.createdAt) }}</p>
+        </div>
+
+        @if (!isNewContact()) {
+          <div class="header-actions">
+            <button mat-raised-button color="primary" (click)="onEditClick()">Edit</button>
+            <button mat-stroked-button color="warn" (click)="onDeleteClick()">Delete</button>
+            <button mat-button (click)="onCancelClick()">Back</button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h2>Contact Information</h2>
+      <div class="info-grid">
+        <div class="info-item"><label>Email</label><p>{{ c.email }}</p></div>
+        <div class="info-item"><label>Phone</label><p>{{ c.phone }}</p></div>
+        <div class="info-item"><label>Cell</label><p>{{ c.cell }}</p></div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h2>Address</h2>
+      <div class="info-grid">
+        <div class="info-item full-width"><label>Street</label><p>{{ c.street }}</p></div>
+        <div class="info-item"><label>City</label><p>{{ c.city }}</p></div>
+        <div class="info-item"><label>State</label><p>{{ c.state }}</p></div>
+        <div class="info-item"><label>Postal Code</label><p>{{ c.postalCode }}</p></div>
+        <div class="info-item"><label>Country</label><p>{{ c.country }}</p></div>
+      </div>
+    </div>
+  }
+  @else {
+    <div class="no-contact"><p>Contact not found</p></div>
+  }
+</section>

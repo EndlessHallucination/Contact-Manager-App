@@ -1,0 +1,72 @@
+<section class="contact-list-container">
+  <div class="list-header">
+    <div class="header-left">
+      <h2>My Contacts</h2>
+      <span class="contact-count">{{ contactCount() }} contacts</span>
+    </div>
+
+    <mat-form-field appearance="outline" >
+      <input 
+        matInput
+        placeholder="Search contacts..."
+        type="text"
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <div class="list-header-actions">
+      <button mat-raised-button color="primary" (click)="onNewContactClick()">
+        New Contact
+      </button>
+
+      <button
+        mat-stroked-button
+        (click)="onAddRandomContactsClick()"
+        [disabled]="isLoadingRandomContacts()"
+      >
+        Add Random Contacts
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading && filteredContacts().length === 0) {
+    <div class="empty-state">
+      <h3>No contacts found</h3>
+      <p>Try a different search or add new contacts.</p>
+    </div>
+  }
+
+  @if (!isLoading && filteredContacts().length > 0) {
+    <div class="contacts-list">
+      @for (contact of filteredContacts(); track contact.id) {
+        <div class="contact-item" (click)="onContactClick(contact.id)">
+          <div class="contact-image">
+            <img
+              [src]="contact.image"
+              [alt]="contact.firstName + ' ' + contact.lastName"
+            />
+          </div>
+
+          <div class="contact-info">
+            <h3 class="contact-name">
+              {{ contact.firstName }} {{ contact.lastName }}
+            </h3>
+            <p class="contact-email">{{ contact.email }}</p>
+            <p class="contact-phone">{{ contact.phone }}</p>
+            <p class="contact-address">{{ getFullAddress(contact) }}</p>
+          </div>
+
+          <div class="contact-meta">
+            <span class="meta-badge">Age: {{ contact.age }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>
