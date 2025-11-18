@@ -43,8 +43,8 @@
     {
       "name": "api-semi-static",
       "urls": [
-        "http://localhost:3000/app/contacts/*",
-        "http://localhost:3000/app/contacts"
+        "http://localhost:3000/app/contacts",
+        "http://localhost:3000/app/contacts/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",

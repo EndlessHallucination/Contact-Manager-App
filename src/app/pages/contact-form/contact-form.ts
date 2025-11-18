@@ -90,15 +90,20 @@ export class ContactForm implements OnInit {
     }
 
     const payload = this.contactForm.value;
+    if (this.contactService.isServerOnline()) {
+      if (this.editMode() && this.contactId()) {
+        this.contactService.updateContact(this.contactId()!, payload).subscribe({
+          next: () => this.router.navigate(['/contacts']),
+          error: () => alert('Error updating contact'),
+        });
+      }
 
-    if (!this.contactService.isServerOnline()) {
-
-    }
-    if (this.editMode() && this.contactId()) {
-      this.contactService.updateContact(this.contactId()!, payload).subscribe({
-        next: () => this.router.navigate(['/contacts']),
-        error: () => alert('Error updating contact'),
-      });
+      if (!this.contactService.isServerOnline()) {
+        this.contactService.addContactTask({ type: 'update', data: { id: this.contactId(), ...payload } });
+        alert("Offline. Update saved and will sync when online.");
+        this.router.navigate(['/contacts']);
+        return;
+      }
     } else {
       if (this.contactService.isServerOnline()) {
         this.contactService.submitContactForm(payload).subscribe({
@@ -109,7 +114,10 @@ export class ContactForm implements OnInit {
         });
       }
       if (!this.contactService.isServerOnline()) {
-        this.contactService.addContactTask({ data: payload, type: 'create' })
+        this.contactService.addContactTask({ data: payload, type: 'create' });
+        alert("You are offline. Contact stored and will sync automatically.");
+        this.router.navigate(['/contacts']);
+        return;
       }
     }
 

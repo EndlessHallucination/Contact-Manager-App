@@ -13,11 +13,13 @@ export class Header implements OnInit {
   contactService = inject(ContactService);
 
   ngOnInit(): void {
-    this.contactService.isOk();
-
+    this.contactService.isOk().subscribe();
   }
 
   onSyncClick() {
-    this.contactService.syncContactTaskQueue()?.subscribe();
+    this.contactService.syncContactTaskQueue()?.subscribe({
+      error: err => console.error("Sync failed", err)
+    });
+
   }
 }
