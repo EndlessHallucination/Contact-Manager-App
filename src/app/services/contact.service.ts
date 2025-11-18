@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { delay, tap, Observable } from 'rxjs';
+import { delay, tap, Observable, concat, zip } from 'rxjs';
+import { SwUpdate } from '@angular/service-worker';
 
 export interface Contact {
   id: number;
@@ -19,6 +20,11 @@ export interface Contact {
   createdAt: string;
 }
 
+interface ContactTask {
+  type: "create" | "delete" | "update";
+  data: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,8 +34,73 @@ export class ContactService {
   isContactListLoading = signal(false);
   isContactDetailsLoading = signal(false);
   contacts = signal<Contact[]>([]);
+  updates = inject(SwUpdate);
 
   cachedContactList = computed(() => this.contacts());
+  isServerOnline = signal(false);
+  contactTaskQueue = signal<ContactTask[]>([]);
+
+
+  constructor() {
+    const saved = localStorage.getItem("contact-task-queue");
+
+    this.contactTaskQueue.set(saved ? JSON.parse(saved) : [])
+
+    window.addEventListener("online", () => { this.isServerOnline.set(true) })
+    window.addEventListener("offline", () => { this.isServerOnline.set(false) })
+
+  }
+
+  addContactTask(task: ContactTask) {
+    this.contactTaskQueue().push(task);
+    localStorage.setItem("contact-task-queue", JSON.stringify(this.contactTaskQueue))
+  }
+
+
+  syncContactTaskQueue() {
+    if (!this.contactTaskQueue().length) {
+      return;
+    }
+
+    if (!this.isServerOnline()) {
+      throw new Error('Invalid sync call');
+    }
+
+    return zip(concat(this.contactTaskQueue().map((task) =>
+      this.executeTask(task)
+    )).pipe(
+      tap(() => {
+        localStorage.setItem("contact-task-queue", JSON.stringify([]));
+        this.contactTaskQueue.set([]);
+      })
+    ))
+  }
+
+  executeTask(task: ContactTask) {
+    if (task.type === 'create') {
+      return this.submitContactForm(task.data);
+    }
+    if (task.type === 'update') {
+      return this.updateContact(task.data.id, task.data);
+    }
+    if (task.type === 'delete') {
+      return this.deleteContact(task.data.id);
+    }
+    throw new Error()
+  }
+
+  isOk() {
+    return this.http.get(`${this.api}/is-ok`).pipe(
+      tap({
+        next: () => {
+          this.isServerOnline.set(true);
+        },
+        error: (() => {
+          this.isServerOnline.set(false);
+        })
+      })
+    )
+  }
 
   loadContactList(): Observable<Contact[]> {
     this.isContactListLoading.set(true);
@@ -65,6 +136,9 @@ export class ContactService {
   }
 
   deleteContact(id: number): Observable<any> {
+    if (navigator.onLine) {
+
+    }
     return this.http.delete(`${this.api}/contacts/${id}`).pipe(
       tap(() => {
         this.contacts.set(this.contacts().filter(c => c.id !== id));

@@ -6,25 +6,13 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 To start a local development server, run:
 
+
 ```bash
 ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
 
 ## Building
 
@@ -36,38 +24,33 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
+## Building and Starting for PWA offline mode 
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+PWA development setup uses http-server package 
 
-## TODO 
+run if http-server is not intstalled 
+
+```bash
+npm install http-server -g
+```
+
+run 
+
+```bash
+ng build --configuration production
+```
+
+then run 
+
+```bash
+npm run start:pwa
+```
 
 
+## TODO
 
-  Offline mode:
- ○ All the app should function in offline mode
- ○ If wechange records (CRUD) we want to be able to change all of this in the client in offline
- mode and all will be synced to the backend when there is connectivity
- 
-    add image upload for contact 
-    check ui for spinners, errors , fonts etc
+alerts and loaders on offline actions 
 
- 
+fix service worker caching issue and contact task queue issue (undefined)

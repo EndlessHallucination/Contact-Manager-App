@@ -3,5 +3,19 @@
     <h1 class="header-title">
       <a routerLink="/" class="logo-link">👥 Contacts</a>
     </h1>
+   
+    <div>
+      <span>
+        {{contactService.isServerOnline() ? 'Online': 'Offline' }}
+      </span>
+      <button matIconButton (click)="onSyncClick()">
+        <mat-icon>sync</mat-icon>
+      </button>
+      <span>
+        Pending Changes: {{contactService.contactTaskQueue().length}}
+      </span>
+    </div>
+   
   </div>
+  
 </header>

@@ -91,19 +91,28 @@ export class ContactForm implements OnInit {
 
     const payload = this.contactForm.value;
 
+    if (!this.contactService.isServerOnline()) {
+
+    }
     if (this.editMode() && this.contactId()) {
       this.contactService.updateContact(this.contactId()!, payload).subscribe({
-        next: () => this.router.navigate(['/contacts', this.contactId()]),
+        next: () => this.router.navigate(['/contacts']),
         error: () => alert('Error updating contact'),
       });
     } else {
-      this.contactService.submitContactForm(payload).subscribe({
-        next: (newContact: Contact) => {
-          this.router.navigate(['/contacts', newContact.id]);
-        },
-        error: () => alert('Error submitting form'),
-      });
+      if (this.contactService.isServerOnline()) {
+        this.contactService.submitContactForm(payload).subscribe({
+          next: () => {
+            this.router.navigate(['/contacts']);
+          },
+          error: () => alert('Error submitting form'),
+        });
+      }
+      if (!this.contactService.isServerOnline()) {
+        this.contactService.addContactTask({ data: payload, type: 'create' })
+      }
     }
+
   }
 
   onCancelClick() {
